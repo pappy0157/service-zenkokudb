@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>プレスリリース配信サービス</title>
+  <meta name="description" content="企業データ（法人情報）の掲載で認知と信頼を、プレスリリース配信で到達と効果測定を。" />
+  <meta name="color-scheme" content="dark light">
+</head>
+<body>
+  <!-- ====== 顶部导航 ====== -->
+<!-- 全国企業データベース：サービス特設ページ / Namespace: zdb-landing -->
+<section class="zdb-landing" aria-label="全国企業データベース サービス紹介">
+  <style>
+    /* ============ Base ============ */
+    .zdb-landing{--zdb-accent:#2b78ff;--zdb-accent-2:#7a5cff;--zdb-bg:#0f1220;--zdb-card:#151a2e;--zdb-text:#e8ebff;--zdb-muted:#a9b0d3;--zdb-border:rgba(255,255,255,.08);--zdb-ok:#2ecc71;--zdb-warn:#f1c40f;--zdb-bad:#ff6b6b;background:linear-gradient(135deg,rgba(43,120,255,.08),rgba(122,92,255,.08)),var(--zdb-bg);color:var(--zdb-text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",Meiryo,sans-serif;line-height:1.75;letter-spacing:.02em}
+    .zdb-landing *{box-sizing:border-box}
+    .zdb-wrap{max-width:1200px;margin:0 auto;padding:40px 20px}
+    .zdb-grid{display:grid;gap:24px}
+    .zdb-card{background:var(--zdb-card);border:1px solid var(--zdb-border);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .zdb-eyebrow{display:inline-flex;align-items:center;gap:.5em;font-size:.825rem;color:var(--zdb-muted);letter-spacing:.08em;text-transform:uppercase}
+    .zdb-tag{padding:.2em .6em;border:1px solid var(--zdb-border);border-radius:999px;background:rgba(255,255,255,.04)}
+    .zdb-h1{font-size:clamp(1.8rem,3.5vw,3rem);line-height:1.25;margin:.2em 0 .4em;font-weight:800}
+    .zdb-lead{font-size:clamp(1rem,2.2vw,1.2rem);color:#d9defa;max-width:60ch}
+    .zdb-hero{position:relative;isolation:isolate;overflow:hidden}
+    .zdb-hero::after{content:"";position:absolute;inset:-20%;background:radial-gradient(600px 300px at 60% -10%,rgba(43,120,255,.25),transparent 65%),radial-gradient(500px 260px at 20% 110%,rgba(122,92,255,.25),transparent 65%);filter:blur(20px);z-index:-1;animation:zdb-fade 12s linear infinite alternate}
+    @keyframes zdb-fade{to{opacity:.6;transform:translateY(-8px)}}
+    .zdb-flex{display:flex;flex-wrap:wrap;gap:18px}
+    .zdb-btn{appearance:none;border:none;border-radius:12px;padding:14px 18px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.6em;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+    .zdb-btn--primary{background:linear-gradient(135deg,var(--zdb-accent),var(--zdb-accent-2));color:white;box-shadow:0 10px 24px rgba(43,120,255,.25)}
+    .zdb-btn--primary:hover{transform:translateY(-2px)}
+    .zdb-btn--ghost{background:transparent;border:1px solid var(--zdb-border);color:var(--zdb-text)}
+    .zdb-kpi{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px}
+    .zdb-kpi .item{padding:10px 14px;border:1px dashed var(--zdb-border);border-radius:12px;background:rgba(255,255,255,.02);font-size:.94rem;color:#d0d6ff}
+    .zdb-icon{width:1.1em;height:1.1em;flex:0 0 auto}
+    .zdb-muted{color:var(--zdb-muted)}
+    .zdb-badge{display:inline-flex;gap:.5em;align-items:center;padding:.35em .7em;border:1px solid var(--zdb-border);border-radius:999px;background:rgba(255,255,255,.04);font-size:.85rem}
+
+    /* ============ Sections ============ */
+    .zdb-hero .zdb-wrap{padding-top:56px;padding-bottom:48px}
+    .zdb-hero-cta{margin-top:20px}
+    .zdb-hero-logos{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .zdb-hero-logos .zdb-badge svg{opacity:.9}
+
+    .zdb-sec{padding:26px}
+    .zdb-sec .zdb-title{font-size:1.4rem;margin:0 0 12px;font-weight:800}
+    .zdb-sec .zdb-desc{margin:0 0 18px;color:#d9defa}
+
+    /* Features */
+    .zdb-features{grid-template-columns:repeat(12,1fr)}
+    .zdb-feature{grid-column:span 6;padding:18px;border-radius:14px;border:1px solid var(--zdb-border);background:rgba(255,255,255,.02)}
+    .zdb-feature h3{margin:.2em 0 .4em;font-size:1.05rem}
+    .zdb-feature p{margin:0;color:#cfd6ff}
+    @media (max-width:820px){.zdb-feature{grid-column:1/-1}}
+
+    /* Pricing */
+    .zdb-pricing{grid-template-columns:repeat(12,1fr)}
+    .zdb-price-card{grid-column:span 3;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));padding:22px;border-radius:16px;border:1px solid var(--zdb-border);position:relative;overflow:hidden}
+    .zdb-price-card.pop{outline:2px solid rgba(43,120,255,.5);box-shadow:0 0 0 6px rgba(43,120,255,.12)}
+    .zdb-price{font-size:1.6rem;font-weight:800;margin:.2em 0}
+    .zdb-bullets{margin:12px 0 16px;padding-left:20px}
+    .zdb-bullets li{margin:.4em 0}
+    .zdb-note{font-size:.85rem;color:var(--zdb-muted)}
+    @media (max-width:980px){.zdb-price-card{grid-column:span 6}}
+    @media (max-width:680px){.zdb-price-card{grid-column:1/-1}}
+
+    /* Compare */
+    .zdb-compare{overflow:auto}
+    .zdb-table{width:100%;border-collapse:separate;border-spacing:0;min-width:720px}
+    .zdb-table th,.zdb-table td{padding:12px 14px;border-bottom:1px solid var(--zdb-border)}
+    .zdb-table thead th{position:sticky;top:0;background:var(--zdb-card);z-index:1}
+    .zdb-table .hit{color:var(--zdb-ok);font-weight:700}
+    .zdb-table .warn{color:var(--zdb-warn);font-weight:700}
+
+    /* SEO / Link benefits */
+    .zdb-highlight{border-left:4px solid var(--zdb-accent);padding:14px 16px;border-radius:12px;background:rgba(43,120,255,.07)}
+
+    /* CTA */
+    .zdb-cta{display:grid;gap:16px;grid-template-columns:1.2fr .8fr;align-items:center}
+    .zdb-cta h2{margin:0;font-size:1.6rem}
+    @media (max-width:860px){.zdb-cta{grid-template-columns:1fr}}
+
+    /* FAQ */
+    .zdb-faq details{border:1px solid var(--zdb-border);border-radius:12px;padding:12px 14px;background:rgba(255,255,255,.02)}
+    .zdb-faq summary{cursor:pointer;font-weight:700}
+    .zdb-faq details+details{margin-top:10px}
+
+    /* Footer small */
+    .zdb-small{font-size:.82rem;color:var(--zdb-muted)}
+
+    /* Links */
+    .zdb-landing a:not(.zdb-btn){color:#9ab5ff;text-decoration:underline}
+    .zdb-landing a:not(.zdb-btn):hover{text-decoration:none}
+  </style>
+
+  <!-- HERO -->
+  <header class="zdb-hero">
+    <div class="zdb-wrap">
+      <span class="zdb-eyebrow">
+        <span class="zdb-tag">全国企業データベース</span> 企業情報のデータベース化 × プレスリリース配信
+      </span>
+      <h1 class="zdb-h1">企業の「信頼」と「到達」を同時に伸ばす、公開データ基盤と配信ハブ。</h1>
+      <p class="zdb-lead">
+        企業データ（法人情報）の掲載で認知と信頼を、プレスリリース配信で到達と効果測定を。<br>
+        2023年11月29日の開設以降、<strong>毎月20万件前後のアクセス</strong>を安定獲得。上位表示と導線最適化でビジネスの機会損失を減らします。
+      </p>
+      <div class="zdb-hero-cta zdb-flex">
+        <a href="/contact/" class="zdb-btn zdb-btn--primary" aria-label="掲載依頼＆コース選択">
+          <!-- icon -->
+          <svg class="zdb-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9h-2a7 7 0 1 1-7-7V3z"/><path d="M21 3h-7v2h4.586L10 13.586 11.414 15 20 6.414V11h2V3z"/></svg>
+          掲載依頼＆コース選択
+        </a>
+        <a href="/category/pressrelease/" class="zdb-btn zdb-btn--ghost">プレスリリース一覧を見る</a>
+      </div>
+      <div class="zdb-kpi" aria-label="主要指標">
+        <div class="item">月間アクセス：約20万件</div>
+        <div class="item">掲載企業：全国対応</div>
+        <div class="item">Google News配信対応</div>
+      </div>
+      <div class="zdb-hero-logos">
+        <span class="zdb-badge"><svg class="zdb-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z"/></svg> シンプル管理</span>
+        <span class="zdb-badge"><svg class="zdb-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 2 7l10 5 10-5-10-5zm0 7L2 4v11l10 5 10-5V4l-10 5z"/></svg> 高信頼データ</span>
+        <span class="zdb-badge"><svg class="zdb-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v6H4zM4 14h10v6H4z"/></svg> SEO設計</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="zdb-wrap">
+    <!-- 1) 掲載メリット -->
+    <section class="zdb-sec zdb-card">
+      <h2 class="zdb-title">全国企業データベースへの掲載</h2>
+      <p class="zdb-desc">企業データ（法人情報）をわかりやすく整備し、認知・信頼・導線を一体で強化。</p>
+
+      <div class="zdb-grid zdb-features">
+        <div class="zdb-feature">
+          <h3>◍ 企業データ（法人情報）の掲載</h3>
+          <p>資本金・売上高・従業員数・設立年月などの基本情報に加え、FAX・URL・メールアドレス等の任意項目、事業内容や強み・ビジョンまで記載可能。<br>潜在顧客やパートナーへ企業の魅力を正しく届けます。</p>
+        </div>
+        <div class="zdb-feature">
+          <h3>◍ 情報の更新・検索が簡単</h3>
+          <p>登録情報はいつでも編集・削除が可能。法人番号・法人名での検索に対応し、常に最新状態を維持できます。</p>
+        </div>
+        <div class="zdb-feature">
+          <h3>◍ 毎月20万件のアクセス</h3>
+          <p>トップページの「優良企業」「アクセスランキング」「ホワイト企業」等の動線から多くの流入を見込めます。</p>
+        </div>
+        <div class="zdb-feature">
+          <h3>◍ 広告枠もご用意</h3>
+          <p>特別欄に掲載されなくても、「PRコース」「プレミアムコース」等の広告枠で追加露出が可能。<br><a href="/contact/">掲載依頼＆コース選択</a>よりご相談ください。</p>
+        </div>
+      </div>
+
+      <div class="zdb-highlight" style="margin-top:16px">
+        <strong>SEO / 被リンクの効果</strong><br>
+        企業情報ページ・プレスリリースページの双方でリンク掲載に対応。<strong>dofollow</strong>で貴社サイトへリンクを渡し、検索エンジン上での評価（いわゆる“ドメインパワー”）の強化が期待できます。<br>
+        ※検索評価の詳細は検索エンジンの仕様に依存しますが、当サイトが開設まもなく安定的に月間20万アクセス前後を獲得している背景には、構造化・内部導線・被リンク設計の最適化が寄与しています。
+      </div>
+    </section>
+
+    <!-- 2) プレスリリース配信の強み -->
+    <section class="zdb-sec zdb-card">
+      <h2 class="zdb-title">当ウェブサイトでのプレスリリース配信</h2>
+      <p class="zdb-desc">“届けたい相手”へ、効率よく、効果を測りながら。</p>
+
+      <div class="zdb-grid zdb-features">
+        <div class="zdb-feature">
+          <h3>◍ ターゲットを絞りやすい</h3>
+          <p>業種・地域・規模など多様な条件で企業検索が可能。関心度の高い相手に絞り込んで届けられます。</p>
+        </div>
+        <div class="zdb-feature">
+          <h3>◍ 反響の可視化</h3>
+          <p>閲覧数・クリック数などのアクセスデータを確認可能。次の一手に活かせる継続改善ができます。</p>
+        </div>
+        <div class="zdb-feature">
+          <h3>◍ 信頼性の担保</h3>
+          <p>全国の企業データを正確に収集・提供することを目指す基盤上で配信。企業としての専門性・透明性を印象づけます。</p>
+        </div>
+        <div class="zdb-feature">
+          <h3>◍ Google News配信</h3>
+          <p>当サイトで配信した記事は<strong>Google Newsにも自動配信</strong>（※一部コンテンツは対象外となる場合があります）。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3) 料金プラン -->
+    <section class="zdb-sec zdb-card">
+      <h2 class="zdb-title">料金プラン</h2>
+      <p class="zdb-desc">必要な頻度・体制に合わせて柔軟に選択できます。全プランで専門ライターがサポート。</p>
+
+      <div class="zdb-grid zdb-pricing" role="list">
+        <article class="zdb-price-card" role="listitem" aria-label="従量課金">
+          <div class="zdb-eyebrow"><span class="zdb-tag">単発</span> 従量課金</div>
+          <div class="zdb-price">15,000円 <small class="zdb-muted">（税別）/ 1回</small></div>
+          <ul class="zdb-bullets">
+            <li>まずは効果を試したい方向け</li>
+            <li>専門ライターが原稿作成を支援</li>
+            <li>Google News配信（条件あり）</li>
+          </ul>
+          <a href="/contact/" class="zdb-btn zdb-btn--primary">このプランで相談</a>
+        </article>
+
+        <article class="zdb-price-card pop" role="listitem" aria-label="月額定額">
+          <div class="zdb-eyebrow"><span class="zdb-tag">人気</span> 月額定額</div>
+          <div class="zdb-price">43,000円 <small class="zdb-muted">（税別）/ 月</small></div>
+          <ul class="zdb-bullets">
+            <li>月3記事以上の配信に最適</li>
+            <li>1ヶ月あたり上限25件まで投稿可</li>
+            <li>継続的な露出＆分析改善</li>
+          </ul>
+          <a href="/contact/" class="zdb-btn zdb-btn--primary">このプランで相談</a>
+          <div class="zdb-note">※上限や配信枠は運用状況により調整する場合があります。</div>
+        </article>
+
+        <article class="zdb-price-card" role="listitem" aria-label="取材コース">
+          <div class="zdb-eyebrow"><span class="zdb-tag">深掘り</span> 取材コース</div>
+          <div class="zdb-price">35,000円 <small class="zdb-muted">（税別）/ 1回</small></div>
+          <ul class="zdb-bullets">
+            <li>専門ライターが取材を実施</li>
+            <li>固有のストーリーを記事化</li>
+            <li>差別化・ブランド構築に最適</li>
+          </ul>
+          <a href="/contact/" class="zdb-btn zdb-btn--primary">このプランで相談</a>
+        </article>
+
+        <article class="zdb-price-card" role="listitem" aria-label="半年コース">
+          <div class="zdb-eyebrow"><span class="zdb-tag">割引</span> 半年コース</div>
+          <div class="zdb-price">38,000円 <small class="zdb-muted">（税別）/ 月</small></div>
+          <ul class="zdb-bullets">
+            <li>6ヶ月の継続契約で割引</li>
+            <li>月3記事以上／上限25件まで</li>
+            <li>長期的なSEO/露出最適化</li>
+          </ul>
+          <a href="/contact/" class="zdb-btn zdb-btn--primary">このプランで相談</a>
+        </article>
+      </div>
+      <p class="zdb-small">※価格は税別表記。詳細なお見積り・条件はお問い合わせください。</p>
+    </section>
+
+    <!-- 4) 比較 / テーブル -->
+    <section class="zdb-sec zdb-card">
+      <h2 class="zdb-title">他手段との比較</h2>
+      <div class="zdb-compare">
+        <table class="zdb-table" aria-label="配信方法の比較表">
+          <thead>
+            <tr>
+              <th>項目</th>
+              <th>全国企業データベース</th>
+              <th>自社サイトのみ</th>
+              <th>SNSのみ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>到達性（業界/地域セグメント）</td>
+              <td class="hit">◎（検索×DB導線×News）</td>
+              <td>△（既存流入頼み）</td>
+              <td>○（拡散依存）</td>
+            </tr>
+            <tr>
+              <td>効果測定（閲覧/クリック）</td>
+              <td class="hit">◎（基本機能で可視化）</td>
+              <td>○（セットアップ次第）</td>
+              <td>△（面での追跡が難）</td>
+            </tr>
+            <tr>
+              <td>信頼性・整合性</td>
+              <td class="hit">◎（企業データと紐付け）</td>
+              <td>○</td>
+              <td>△（投稿の埋没/流動）</td>
+            </tr>
+            <tr>
+              <td>コストパフォーマンス</td>
+              <td class="hit">◎（一律料金/継続割）</td>
+              <td>△（制作・運用工数）</td>
+              <td class="warn">▲（広告依存で変動）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 5) CTA -->
+    <section class="zdb-sec zdb-card">
+      <div class="zdb-cta">
+        <div>
+          <h2>まずは掲載から。プレス配信までワンストップで。</h2>
+          <p class="zdb-muted">企業ページ作成で<strong>dofollow</strong>リンクを付与。上位導線と合わせて、顧客との最短距離をデザインします。</p>
+        </div>
+        <div class="zdb-flex">
+          <a href="/company/entry/" class="zdb-btn zdb-btn--primary">企業データを登録する</a>
+          <a href="/contact/" class="zdb-btn zdb-btn--ghost">掲載依頼＆コース選択</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6) FAQ -->
+    <section class="zdb-sec zdb-card zdb-faq">
+      <h2 class="zdb-title">よくある質問</h2>
+
+      <details>
+        <summary>掲載後の情報編集は自分でできますか？</summary>
+        <div class="zdb-desc">はい。管理画面からいつでも編集・削除が可能です。法人番号・法人名での検索にも対応しています。</div>
+      </details>
+
+      <details>
+        <summary>dofollowリンクは必ず付与されますか？</summary>
+        <div class="zdb-desc">はい、基本仕様としてdofollowで付与します。ただし、スパム的・不適切なリンク先の場合は審査の上で制限することがあります。</div>
+      </details>
+
+      <details>
+        <summary>Google Newsへの掲載は必ず行われますか？</summary>
+        <div class="zdb-desc">当サイトの配信記事は自動連携されますが、<strong>アダルトや暴力的表現などガイドラインに抵触する場合は除外</strong>される可能性があります。</div>
+      </details>
+
+      <details>
+        <summary>月額の上限25件を超える配信は可能ですか？</summary>
+        <div class="zdb-desc">状況に応じて個別見積りにて対応します。まずはお気軽にご相談ください。</div>
+      </details>
+
+      <details>
+        <summary>ライターのサポートはどのプランでも受けられますか？</summary>
+        <div class="zdb-desc">はい。全プランで専門ライターが原稿作成・リライト・見出し設計などを支援します。キーワード提供のみでも原案作成が可能です。</div>
+      </details>
+    </section>
+
+    <p class="zdb-small">※本ページの仕様や料金は予告なく変更となる場合があります。最新情報はお問い合わせください。</p>
+  </div>
+  </div>
+</section>
+</body>
+</html>
