@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>全国企業データベース – 登録企業＆特設ページ（別ドメインRSS対応）</title>
+<style>
+/* =========================
+   NKDB Companies Portal (HTML+CSS+JS only)
+   ========================= */
+:root{
+  --bg:#0b0f14; --panel:#111823; --panel-2:#0e1420; --line:#1a2332;
+  --text:#e9eef7; --muted:#a9b3c6; --acc:#61d5ff; --acc2:#7affb3;
+  --radius:16px; --shadow:0 10px 28px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Kaku Gothic ProN","Meiryo",sans-serif}
+a{color:inherit}
+
+.nkdb-wrap{max-width:1200px;margin:0 auto;padding:clamp(18px,3vw,28px)}
+/* Hero */
+.nkdb-hero{position:relative;border:1px solid var(--line);border-radius:var(--radius);
+  background:linear-gradient(140deg,#131b26 0%,#0b1119 58%), radial-gradient(800px 260px at 8% -16%, rgba(97,213,255,.18), transparent 60%);
+  padding:clamp(18px,3vw,28px);box-shadow:var(--shadow);overflow:hidden}
+.nkdb-hero h1{margin:.1rem 0 .4rem;font-size:clamp(24px,3vw,36px);font-weight:800}
+.nkdb-hero p{margin:.3rem 0 1rem;color:#cfd6e3;max-width:70ch}
+.nkdb-hero .kpi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
+.nkdb-hero .kpi .k{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:10px}
+.nkdb-hero .k h3{margin:.1rem 0;font-size:clamp(18px,2.2vw,24px)}
+.nkdb-hero .k p{margin:.2rem 0 0;color:var(--muted);font-size:13px}
+.nkdb-eyebrow{display:inline-flex;gap:.6em;align-items:center;color:var(--muted);
+  background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:999px;padding:.35em .8em}
+.nkdb-eyebrow b{color:var(--acc)}
+
+.nkdb-ctrl{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:14px}
+.nkdb-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.nkdb-tab{appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);
+  padding:.5em .9em;border-radius:999px;cursor:pointer;font-weight:700}
+.nkdb-tab[aria-selected="true"]{background:linear-gradient(90deg, rgba(97,213,255,.25), rgba(122,255,179,.25));box-shadow:inset 0 0 0 1px rgba(97,213,255,.4)}
+.nkdb-search input{width:min(360px,80vw);background:#0f1520;border:1px solid var(--line);color:var(--text);
+  padding:.6em .85em;border-radius:10px}
+
+/* Panels & Grid */
+.nkdb-panel{display:none;margin-top:16px}
+.nkdb-panel.is-active{display:block}
+.nkdb-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.nkdb-card{
+  flex-direction: column;             /* 横並び → 縦並び */
+  min-height: initial;                /* 横レイアウト用の最小高さを解除 */
+}
+
+.nkdb-thumb{
+  flex: none;
+  width: 100%;
+  /* 画像エリアの縦横比。お好みで 4/3 や 1/1 に変更可 */
+  aspect-ratio: 16 / 9;
+  height: auto;                       /* 古い指定を上書き */
+  background:#0a0f14;
+  display:block;                      /* クリック面をブロック化 */
+  overflow:hidden;                    /* はみ出し防止 */
+}
+
+/* 画像 or プレースホルダをフル幅・トリミング表示 */
+.nkdb-thumb img,
+.nkdb-ph{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* プレースホルダの最小高さ指定をリセット（縦並び用）*/
+.nkdb-ph{
+  min-height: unset;
+  display:grid;
+  place-items:center;
+  font-size: 28px;
+}
+
+/* テキスト側の余白を少し増やす（見栄え調整） */
+.nkdb-body{
+  padding: 12px 14px 16px;
+}
+.nkdb-title{margin:0;font-size:16px;line-height:1.35}
+.nkdb-title a{text-decoration:none}
+.nkdb-title a:hover{text-decoration:underline}
+.nkdb-date{font-size:12px;color:var(--muted)}
+.nkdb-excerpt{margin:.2rem 0;color:#cbd3e3}
+.nkdb-meta{display:flex;gap:8px;align-items:center;margin-top:auto}
+.nkdb-host{font-size:12px;color:var(--muted)}
+.nkdb-badge{font-size:11px;color:#9ed7ff;background:rgba(97,213,255,.1);border:1px solid rgba(97,213,255,.35);padding:.15em .5em;border-radius:999px}
+.nkdb-empty{padding:18px;border:1px dashed var(--line);border-radius:12px;background:rgba(255,255,255,.03)}
+.nkdb-foot{margin-top:12px}
+.nkdb-small{font-size:12px;color:var(--muted)}
+
+.nkdb-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.nkdb-btn{appearance:none;border:0;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.6em}
+.nkdb-btn--primary{background:linear-gradient(180deg,#64d8ff,#3fbdf0);color:#002438;box-shadow:0 10px 20px rgba(100,216,255,.25)}
+.nkdb-btn--ghost{background:rgba(255,255,255,.04);color:var(--text);border:1px solid var(--line)}
+
+@media (max-width:980px){
+  .nkdb-grid{grid-template-columns:1fr 1fr}
+  .nkdb-thumb{flex-basis:110px}
+  .nkdb-thumb img,.nkdb-ph{width:110px}
+}
+@media (max-width:640px){
+  .nkdb-grid{grid-template-columns:1fr}
+  .nkdb-thumb{flex-basis:100px}
+  .nkdb-thumb img,.nkdb-ph{width:100px}
+}
+</style>
+</head>
+<body>
+  <div class="nkdb-wrap">
+    <!-- HERO -->
+    <header class="nkdb-hero">
+      <span class="nkdb-eyebrow">別ドメインRSSを<span><b>サーバーレス</b></span>で集約表示</span>
+      <h1>全国企業データベース｜登録企業＆特設ページ</h1>
+      <p>
+        下記の公式RSS（企業一覧・各カテゴリ・プレスリリース）を**別ドメインから**取得し、検索・タブ切替で見やすく表示します。
+        画像は <code>media:content / thumbnail / enclosure / 本文&lt;img&gt;</code> を優先順で抽出。必要に応じて自社プロキシに切替可能です。
+      </p>
+      <div class="kpi">
+        <div class="k"><h3>自動更新</h3><p>RSSに応じて最新順に反映</p></div>
+        <div class="k"><h3>CORS回避</h3><p>公開プロキシ→自前プロキシに差替可</p></div>
+        <div class="k"><h3>快適表示</h3><p>ローカルキャッシュ（10分）</p></div>
+      </div>
+
+      <div class="nkdb-ctrl">
+        <div class="nkdb-tabs" role="tablist" aria-label="カテゴリ切替">
+          <!-- JSで自動生成 -->
+        </div>
+        <div class="nkdb-search">
+          <input type="search" placeholder="企業名・概要・キーワードで検索" aria-label="検索" id="nkdb-q">
+        </div>
+      </div>
+      <div class="nkdb-cta">
+        <a class="nkdb-btn nkdb-btn--primary" href="https://companydata.tsujigawa.com" target="_blank" rel="noopener">公式サイトへ</a>
+        <a class="nkdb-btn nkdb-btn--ghost" href="https://companydata.tsujigawa.com/category/pressrelease/" target="_blank">プレスリリース一覧へ移動</a>
+      </div>
+    </header>
+
+    <!-- PANELS（JSで描画） -->
+    <div id="nkdb-panels"></div>
+
+    <footer class="nkdb-foot">
+      <p class="nkdb-small">Copyright © 全国企業データベース-プレスリリース配信サービス. All Rights Reserved.</p>
+    </footer>
+  </div>
+
+<script>
+/* =========================
+   NKDB Companies Portal JS
+   - フロントのみで別ドメインRSSを読む
+   - 公開CORSプロキシに自動フォールバック
+   ========================= */
+
+// ▼ フィード定義（必要ならここを差し替え）
+const FEEDS = [
+  { key: "newcompanies", label: "新着企業", url: "https://companydata.tsujigawa.com/company/feed/", limit: 12 },
+  { key: "excellent",    label: "優良企業", url: "https://companydata.tsujigawa.com/introduce_tag/excellent-company/feed/", limit: 12 },
+  { key: "newly",        label: "新規設立企業", url: "https://companydata.tsujigawa.com/introduce_tag/new-companyfeed/", limit: 12 },
+  { key: "highprofit",   label: "高利益企業/TOP企業", url: "https://companydata.tsujigawa.com/introduce_tag/high-profit-companies/feed/", limit: 12 },
+  { key: "white",        label: "ホワイト企業", url: "https://companydata.tsujigawa.com/introduce_tag/white-company/feed/", limit: 12 },
+  { key: "black",        label: "ブラック企業", url: "https://companydata.tsujigawa.com/introduce_tag/black-company/feed/", limit: 12 },
+  { key: "listed",       label: "上場企業", url: "https://companydata.tsujigawa.com/introduce_tag/listed-company/feed/", limit: 12 },
+  { key: "press",        label: "新着プレスリリース", url: "https://companydata.tsujigawa.com/category/pressrelease/feed/", limit: 12 },
+];
+
+// ▼ CORSプロキシ（上から順に試す）※独自プロキシを使う場合はここを書き換え
+const PROXIES = [
+  u => "https://api.allorigins.win/raw?url=" + encodeURIComponent(u),
+  u => "https://cors.isomorphic-git.org/" + u,
+  // 例：自前プロキシ（/proxy?url=...）に差し替えるなら下記を先頭に追加
+  // u => "/proxy?url=" + encodeURIComponent(u),
+];
+
+// ▼ キャッシュの有効期限（ミリ秒）
+const CACHE_MS = 10 * 60 * 1000; // 10分
+
+// ------------- UTILS -------------
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+function fmtDate(d){
+  try{
+    const dt = (d instanceof Date) ? d : new Date(d);
+    // YYYY.MM.DD
+    const y = dt.getFullYear();
+    const m = String(dt.getMonth()+1).padStart(2,"0");
+    const da = String(dt.getDate()).padStart(2,"0");
+    return `${y}.${m}.${da}`;
+  }catch(_){ return ""; }
+}
+function toText(html){
+  if(!html) return "";
+  const tmp = document.createElement("div");
+  tmp.innerHTML = html;
+  return (tmp.textContent || tmp.innerText || "").replace(/\s+/g," ").trim();
+}
+function excerpt(str, n=140){
+  if(!str) return "";
+  const s = str.trim();
+  return s.length > n ? s.slice(0,n) + "…" : s;
+}
+function hostOf(url){
+  try{ return new URL(url).host; }catch(_){ return ""; }
+}
+function pickImageFromContent(html){
+  if(!html) return null;
+  const m = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return m ? m[1] : null;
+}
+function getXMLTag(node, name){
+  // 名前空間有無を考慮して最初に見つかった要素を返す
+  return node.getElementsByTagName(name)[0] || node.getElementsByTagNameNS("*", name)[0] || null;
+}
+
+// ------------- FETCH with fallback -------------
+async function fetchViaProxies(url){
+  let lastErr = null;
+  for(const build of PROXIES){
+    const proxyURL = build(url);
+    try{
+      const res = await fetch(proxyURL, { mode: "cors" });
+      if(!res.ok) throw new Error(res.status + " " + res.statusText);
+      const txt = await res.text();
+      if(!txt) throw new Error("empty response");
+      return txt;
+    }catch(e){
+      lastErr = e;
+    }
+  }
+  throw lastErr || new Error("All proxies failed");
+}
+
+// ------------- CACHE -------------
+function cacheKey(url){ return "nkdb_rss_" + url; }
+function getCache(url){
+  try{
+    const raw = localStorage.getItem(cacheKey(url));
+    if(!raw) return null;
+    const obj = JSON.parse(raw);
+    if(Date.now() - obj.time > CACHE_MS) return null;
+    return obj.text;
+  }catch(_){ return null; }
+}
+function setCache(url, text){
+  try{
+    localStorage.setItem(cacheKey(url), JSON.stringify({time:Date.now(), text}));
+  }catch(_){}
+}
+
+// ------------- PARSE RSS -------------
+function parseRSS(xmlText, limit=12){
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(xmlText, "application/xml");
+  // エラーチェック
+  const parseErr = xml.querySelector("parsererror");
+  if(parseErr) throw new Error("XML parse error");
+
+  const channelTitle = xml.querySelector("channel>title")?.textContent || "";
+  const items = Array.from(xml.querySelectorAll("item")).slice(0, limit).map(it => {
+    const title = it.querySelector("title")?.textContent?.trim() || "(無題)";
+    const link  = it.querySelector("link")?.textContent?.trim() || "#";
+    const pub   = it.querySelector("pubDate")?.textContent || it.querySelector("dc\\:date, date")?.textContent || "";
+    const date  = pub ? new Date(pub) : null;
+
+    // description / content:encoded
+    const descNode = getXMLTag(it, "description");
+    const contentNode = getXMLTag(it, "content:encoded") || getXMLTag(it, "encoded");
+    const descHTML = contentNode?.textContent || descNode?.textContent || "";
+    const descText = toText(descHTML);
+
+    // 画像抽出: media:content / media:thumbnail / enclosure / 本文img
+    let img = null;
+    const mediaContent = getXMLTag(it, "media:content");
+    if(mediaContent?.getAttribute("url")) img = mediaContent.getAttribute("url");
+    if(!img){
+      const mediaThumb = getXMLTag(it, "media:thumbnail");
+      if(mediaThumb?.getAttribute("url")) img = mediaThumb.getAttribute("url");
+    }
+    if(!img){
+      const enclosure = it.querySelector("enclosure");
+      const encUrl = enclosure?.getAttribute("url");
+      const encType = enclosure?.getAttribute("type");
+      if(encUrl && (!encType || encType.startsWith("image/"))) img = encUrl;
+    }
+    if(!img){
+      // description/content内の<img>
+      img = pickImageFromContent(descHTML);
+    }
+
+    return {
+      title, link, date: date ? +date : 0,
+      dateText: date ? fmtDate(date) : "",
+      excerpt: excerpt(descText, 140),
+      image: img,
+      host: hostOf(link),
+      channelTitle
+    };
+  });
+
+  return items;
+}
+
+// ------------- RENDER -------------
+function renderUI(){
+  const tabsEl = document.querySelector(".nkdb-tabs");
+  const panelsWrap = document.getElementById("nkdb-panels");
+
+  // Tabs
+  tabsEl.innerHTML = FEEDS.map((f,i)=>(
+    `<button class="nkdb-tab" role="tab" data-target="${f.key}" aria-selected="${i===0?'true':'false'}">${f.label}</button>`
+  )).join("");
+
+  // Panels skeleton
+  panelsWrap.innerHTML = FEEDS.map((f,i)=>(
+    `<section id="${f.key==='press'?'press-panel':''}" class="nkdb-panel ${i===0?'is-active':''}" role="tabpanel" data-panel="${f.key}">
+      <div class="nkdb-grid" id="grid-${f.key}">
+        ${Array.from({length:Math.min(6,f.limit||12)}).map(()=>(
+          `<article class="nkdb-card"><div class="nkdb-thumb"><span class="nkdb-ph">…</span></div>
+            <div class="nkdb-body"><h3 class="nkdb-title">読み込み中…</h3>
+            <time class="nkdb-date"></time><p class="nkdb-excerpt nkdb-small">RSSから取得しています。</p>
+            <div class="nkdb-meta"><span class="nkdb-host"></span><span class="nkdb-badge">${f.label}</span></div></div></article>`
+        )).join("")}
+      </div>
+    </section>`
+  )).join("");
+
+  // Tab behavior
+  tabsEl.addEventListener("click", (e)=>{
+    const btn = e.target.closest(".nkdb-tab");
+    if(!btn) return;
+    const key = btn.dataset.target;
+    $$(".nkdb-tab").forEach(b=>b.setAttribute("aria-selected", b===btn ? "true":"false"));
+    $$(".nkdb-panel").forEach(p=>p.classList.toggle("is-active", p.dataset.panel===key));
+    applySearch(); // 再適用
+  });
+}
+
+function renderFeedItems(key, label, items){
+  const grid = document.getElementById(`grid-${key}`);
+  if(!grid) return;
+
+  if(!items || !items.length){
+    grid.innerHTML = `<div class="nkdb-empty"><p>該当データがありませんでした。</p><p class="nkdb-small">カテゴリ: ${label}</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = items.map(it => {
+    const title = escapeHTML(it.title);
+    const link = escapeAttr(it.link);
+    const dateText = it.dateText ? `<time class="nkdb-date">${it.dateText}</time>` : "";
+    const excerpt = it.excerpt ? `<p class="nkdb-excerpt">${escapeHTML(it.excerpt)}</p>` : "";
+    const host = escapeHTML(it.host);
+    const img = it.image ? `<img src="${escapeAttr(it.image)}" alt="" loading="lazy" decoding="async">` : `<span class="nkdb-ph">${title.slice(0,1)}</span>`;
+    return `
+      <article class="nkdb-card" data-title="${escapeAttr(title.toLowerCase())}" data-desc="${escapeAttr(it.excerpt?.toLowerCase()||'')}">
+        <a class="nkdb-thumb" href="${link}" target="_blank" rel="noopener">${img}</a>
+        <div class="nkdb-body">
+          <h3 class="nkdb-title"><a href="${link}" target="_blank" rel="noopener">${title}</a></h3>
+          ${dateText}
+          ${excerpt}
+          <div class="nkdb-meta">
+            <span class="nkdb-host">${host}</span>
+            <span class="nkdb-badge">${label}</span>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+function escapeHTML(s){ return (s||"").replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+function escapeAttr(s){ return escapeHTML(s); }
+
+// ------------- SEARCH -------------
+function applySearch(){
+  const q = ($("#nkdb-q")?.value||"").trim().toLowerCase();
+  const active = $(".nkdb-panel.is-active");
+  if(!active) return;
+  active.querySelectorAll(".nkdb-card").forEach(card=>{
+    if(!q){ card.style.display=""; return; }
+    const t = card.getAttribute("data-title") || "";
+    const d = card.getAttribute("data-desc") || "";
+    card.style.display = (t.includes(q) || d.includes(q)) ? "" : "none";
+  });
+}
+
+// ------------- BOOT -------------
+(async function(){
+  renderUI();
+
+  $("#nkdb-q")?.addEventListener("input", applySearch);
+
+  // 並列取得
+  await Promise.all(FEEDS.map(async f=>{
+    try{
+      const cached = getCache(f.url);
+      const xmlText = cached || await fetchViaProxies(f.url);
+      if(!cached) setCache(f.url, xmlText);
+      const items = parseRSS(xmlText, f.limit||12);
+      renderFeedItems(f.key, f.label, items);
+    }catch(e){
+      const grid = document.getElementById(`grid-${f.key}`);
+      if(grid){
+        grid.innerHTML = `<div class="nkdb-empty">
+            <p>フィードの取得に失敗しました。時間をおいて再度お試しください。</p>
+            <p class="nkdb-small">カテゴリ: ${escapeHTML(f.label)} / URL: ${escapeHTML(f.url)} / error: ${escapeHTML(String(e.message||e))}</p>
+        </div>`;
+      }
+    }
+  }));
+})();
+</script>
+</body>
+</html>
